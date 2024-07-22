@@ -1,0 +1,382 @@
+###MODEL ENVIRONMENTAL VARIABLES AND COMMUNITY COMPOSITION: 02.04.2024#####
+
+#Load necessary libraries
+
+library(GGally)
+library(nlme)
+library(factoextra)
+library(ggpubr)
+
+# Read input data
+ecovar_data_GLM_nocategories <- read.csv("~/Documents/Phd/Biogeography/Modeling/ecovara_data_Chelsea_nocategories.csv", sep=";")
+
+plot(ecovar_data_GLM_nocategories$composition_genera, ecovar_data_GLM_nocategories$soil_thick)
+
+
+
+# Plot the correlation between variables
+corvar<-cor(ecovar_data_GLM_nocategories)
+corrplot(corvar)
+corr <- data.frame(lapply(ecovar_data_GLM_nocategories, as.integer))
+ggcorr(corr,
+       method = c("pairwise", "spearman"),
+       nbreaks = 6,
+       hjust = 0.8,
+       label = TRUE,
+       label_size = 3,
+       color = "grey50")
+
+#Obtain a PCA of the different variables from the correlation matrix
+
+data.pca <- princomp(corr, cor=TRUE)
+summary(data.pca)
+fviz_pca_var(data.pca, col.var = "contrib", gradient.cols = c("blue", "yellow", "red"))
+
+
+#Scatter plot of all variables
+plot(ecovar_data_GLM_nocategories)
+
+#Check for normal distribution of variables
+
+m <- ggplot(ecovar_data_GLM_nocategories, aes(x=soil_thick)) + 
+  geom_histogram()
+
+m
+n <- ggplot(ecovar_data_GLM_nocategories, aes(x=top_com)) + 
+  geom_histogram()
+
+n
+
+hist(ecovar_data_GLM_nocategories$soil_thick)
+hist(ecovar_data_GLM_nocategories$top_com)
+
+#Transform data to fit normal distribution and model assumptions
+ecovar_data_GLM_nocategories$soil_thick_log<-(log((ecovar_data_GLM_nocategories$soil_thick)+1))
+ecovar_data_GLM_nocategories$top_com_log<-log(ecovar_data_GLM_nocategories$top_com)
+
+#Inspect normal distribution of transformed variables
+hist(ecovar_data_GLM_nocategories$soil_thick_log)
+hist(ecovar_data_GLM_nocategories$top_com_log)
+
+o <- ggplot(ecovar_data_GLM_nocategories, aes(x=soil_thick_log)) + 
+  geom_histogram(binwidth=0.5)
+
+o 
+p <- ggplot(ecovar_data_GLM_nocategories, aes(x=top_com_log)) + 
+  geom_histogram()
+  
+p 
+
+histogram_variabletransformation<-ggarrange(m,n,o,p + rremove("x.text"), 
+                           labels = c("A", "B", "C", "D"),
+                           ncol = 2, nrow = 2)
+histogram_variabletransformation
+
+#### GLS: Composition of Genera #### 
+
+# Null model (1)
+
+vP0_1 <- varPower(form=~Latitude+dem_ele+dem_cur+top_com_log+rock_type_int+soil_thick_log+MAP_chelsa+range_tmp_chelsa+MAT_chelsa+range_pre_chelsa)
+M_1_0<-gls(composition_genera ~ Latitude+dem_ele+dem_cur+top_com_log+rock_type_int+soil_thick_log+MAP_chelsa+range_tmp_chelsa+MAT_chelsa+range_pre_chelsa, data=ecovar_data_GLM_nocategories, 
+          weights=vP0_1)
+summary(M_1_0)
+plot(M_1_0)
+
+# Geomorphological Null (2.1)
+vP2_1 <- varPower(form=~Latitude+dem_ele+dem_cur+top_com_log+rock_type_int+soil_thick_log)
+M_2_1<-gls(composition_genera ~ Latitude+dem_ele+dem_cur+top_com_log+rock_type_int+soil_thick_log, 
+          weights=vP2_1, data=ecovar_data_GLM_nocategories)
+summary(M_2_1)
+plot(M_2_1)
+
+# Geomorphological Elevation (2.2)  
+vP2_2 <- varPower(form=~dem_ele)
+M_2_2<-gls(composition_genera ~ dem_ele, 
+          weights=vP2_2, data=ecovar_data_GLM_nocategories)
+summary(M_2_2)
+plot(M_2_2)
+
+# Geomorphological topographic complexity (2.3) 
+vP2_3 <- varIdent(form=~top_com_log)
+M_2_3<-gls(composition_genera ~ top_com_log, 
+         weights=vP2_3,
+          data=ecovar_data_GLM_nocategories)
+summary(M_2_3)
+plot(M_2_3)
+
+#Geomorphological soil thickness (2.4)
+vP2_4 <- varIdent(form=~soil_thick_log)
+M_2_4<-gls(composition_genera ~ soil_thick_log, 
+           weights=vP2_4,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_4)
+plot(M_2_4)
+
+#Geomorphological curvature (2.5)
+
+vP2_5 <- varIdent(form=~dem_cur)
+M_2_5<-gls(composition_genera ~dem_cur, 
+           weights=vP2_5,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_5)
+plot(M_2_5)
+
+
+#Geomorphological rock type (2.6)
+
+vP2_6 <- varPower(form=~rock_type_int)
+M_2_6<-gls(composition_genera ~ rock_type_int, 
+           weights=vP2_6,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_6)
+plot(M_2_6)
+
+#Geomorphological latitude (2.7)
+
+vP2_7 <- varPower(form=~Latitude)
+M_2_7<-gls(composition_genera ~ Latitude, 
+           weights=vP2_7,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_7)
+plot(M_2_7)
+
+#Geomorphological elevation and top complexity (2.8)
+
+vP2_8 <- varPower(form=~dem_ele+top_com_log)
+M_2_8<-gls(composition_genera ~ dem_ele+top_com_log, 
+           weights=vP2_8,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_8)
+plot(M_2_8)
+
+
+
+#Geomorphological elevation and soil_thick_log (2.9)
+
+vP2_9 <- varPower(form=~dem_ele+soil_thick_log)
+M_2_9<-gls(composition_genera ~ dem_ele+soil_thick_log, 
+           weights=vP2_9,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_9)
+plot(M_2_9)
+
+
+#Geomorphological elevation and rock type  (2.11)
+
+vP2_11 <- varPower(form=~dem_ele+rock_type_int)
+M_2_11<-gls(composition_genera ~ dem_ele+rock_type_int, 
+           weights=vP2_11,
+           data=ecovar_data_GLM_nocategories)
+summary(M_2_11)
+plot(M_2_11)
+
+#Geomorphological elevation and Latitude (2.12)
+
+vP2_12 <- varPower(form=~dem_ele+Latitude)
+M_2_12<-gls(composition_genera ~ dem_ele+Latitude, 
+            weights=vP2_12,
+            data=ecovar_data_GLM_nocategories)
+summary(M_2_12)
+plot(M_2_12)
+
+
+#Geomorphological soil thickness and curvature (2.13)
+
+vP2_13 <- varIdent(form=~soil_thick_log+top_com_log)
+M_2_13<-gls(composition_genera ~ soil_thick_log+top_com_log, 
+            weights=vP2_13,
+            data=ecovar_data_GLM_nocategories)
+summary(M_2_13)
+plot(M_2_13)
+
+#Geomorphological latitude and top comp (2.14)
+
+vP2_14 <- varIdent(form=~Latitude+top_com_log)
+M_2_14<-gls(composition_genera ~ Latitude+top_com_log, 
+            weights=vP2_14,
+            data=ecovar_data_GLM_nocategories)
+summary(M_2_14)
+plot(M_2_14)
+
+
+#Geomorphological soil thickness and latitude (2.15)
+
+vP2_15 <- varPower(form=~soil_thick_log+Latitude)
+M_2_15<-gls(composition_genera ~ soil_thick_log+Latitude, 
+            weights=vP2_15,
+            data=ecovar_data_GLM_nocategories)
+summary(M_2_15)
+plot(M_2_15)
+
+# Climatic Null (3.1) H: are temperature and precipitation determining biodiv?
+
+vP3_1 <- varIdent(form=~MAP_chelsa+range_tmp_chelsa+MAT_chelsa+range_pre_chelsa)
+M_3_1<-gls(composition_genera ~ MAP_chelsa+range_tmp_chelsa+MAT_chelsa+range_pre_chelsa, 
+          weights=vP3_1, data=ecovar_data_GLM_nocategories)
+summary(M_3_1)
+plot(M_3_1)
+
+# Climatic 2 (3.2) H: is the effect of temp and its variation larger than that of precipitation?
+vP3_2 <- varPower(form=~MAT_chelsa)
+M_3_2<-gls(composition_genera ~MAT_chelsa, 
+           weights=vP3_2,
+           data=ecovar_data_GLM_nocategories)
+summary(M_3_2)
+plot(M_3_2)
+
+#Climatic precipitation (3.3) H: range temp?
+
+vP3_3 <- varIdent(form=~range_tmp_chelsa) 
+M_3_3<-gls(composition_genera ~ range_tmp_chelsa, 
+          weights=vP3_3, 
+           data=ecovar_data_GLM_nocategories)
+summary(M_3_3)
+plot(M_3_3)
+
+#Climatic precipitation (3.4) 
+
+vP3_4 <- varIdent(form=~MAP_chelsa) 
+M_3_4<-gls(composition_genera ~ MAP_chelsa, 
+           weights=vP3_4, 
+           data=ecovar_data_GLM_nocategories)
+summary(M_3_4)
+plot(M_3_4)
+
+#Climatic precipitation (3.3) H: is the effect of precipitation larger than the effect of temp?
+
+vP3_5 <- varIdent(form=~range_pre_chelsa) 
+M_3_5<-gls(composition_genera ~ range_pre_chelsa, 
+           weights=vP3_5, 
+           data=ecovar_data_GLM_nocategories)
+summary(M_3_5)
+plot(M_3_5)
+
+# Climatic precipitation and temperature (3.6)
+
+vP3_6 <- varIdent(form=~MAP_chelsa+MAT_chelsa)
+M_3_6<-gls(composition_genera ~ MAP_chelsa+MAT_chelsa, 
+           weights=vP3_6, data=ecovar_data_GLM_nocategories)
+summary(M_3_6)
+plot(M_3_6)
+
+# Climatic precipitation and temperature ranges (3.7)
+
+vP3_7 <- varIdent(form=~MAP_chelsa+range_pre_chelsa)
+M_3_7<-gls(composition_genera ~ MAP_chelsa+range_pre_chelsa, 
+           weights=vP3_7, data=ecovar_data_GLM_nocategories)
+summary(M_3_7)
+plot(M_3_7)
+
+# Climatic precipitation range and temperature (3.8)
+
+vP3_8 <- varIdent(form=~MAT_chelsa+range_pre_chelsa)
+M_3_8<-gls(composition_genera ~ MAT_chelsa+range_pre_chelsa, 
+           weights=vP3_8, data=ecovar_data_GLM_nocategories)
+summary(M_3_8)
+plot(M_3_8)
+
+
+# Geo vs Climatic - Are some geo and clim variables together driving biodiv?
+
+#Geo vs Climatic elevation and temperature (4.1)
+
+vP4_1 <- varPower(form=~dem_ele+MAT_chelsa)
+M_4_1<-gls(composition_genera ~ dem_ele+MAT_chelsa, 
+           weights=vP4_1, data=ecovar_data_GLM_nocategories)
+summary(M_4_1)
+plot(M_4_1)
+
+
+#Geo vs Climatic elevation and precipitation (4.2)
+
+vP4_2 <- varPower(form=~dem_ele+MAP_chelsa)
+M_4_2<-gls(composition_genera ~ dem_ele+MAP_chelsa, 
+          weights=vP4_2, data=ecovar_data_GLM_nocategories)
+summary(M_4_2)
+plot(M_4_2)
+
+
+#Geo vs Climatic elevation and range precipitation (4.3)
+
+vP4_3 <- varPower(form=~range_pre_chelsa+dem_ele)
+M_4_3<-gls(composition_genera ~ range_pre_chelsa+dem_ele, 
+           weights=vP4_3, data=ecovar_data_GLM_nocategories)
+summary(M_4_3)
+plot(M_4_3)
+
+
+
+#Geo vs Climatic soil thickness and temp (4.4)
+
+vP4_4 <- varIdent(form=~soil_thick_log+MAT_chelsa)
+M_4_4<-gls(composition_genera ~ soil_thick_log+MAT_chelsa, 
+           weights=vP4_4, data=ecovar_data_GLM_nocategories)
+summary(M_4_4)
+plot(M_4_4)
+
+#Geo vs Climatic soil thickness and pre (4.5)
+
+vP4_5 <- varIdent(form=~soil_thick_log+MAP_chelsa)
+M_4_5<-gls(composition_genera ~ soil_thick_log+MAP_chelsa, 
+           weights=vP4_5, data=ecovar_data_GLM_nocategories)
+summary(M_4_5)
+plot(M_4_5)
+
+#Geo vs Climatic soil thickness and pre ranges (4.6)
+
+vP4_6 <- varIdent(form=~soil_thick_log+range_pre_chelsa)
+M_4_6<-gls(composition_genera ~ soil_thick_log+range_pre_chelsa, 
+           weights=vP4_6, data=ecovar_data_GLM_nocategories)
+summary(M_4_6)
+plot(M_4_6)
+
+
+#Geo vs Climatic soil thickness and pre (4.7)
+
+vP4_7 <- varIdent(form=~top_com_log+MAT_chelsa)
+M_4_7<-gls(composition_genera ~ top_com_log+MAT_chelsa, 
+           weights=vP4_7, data=ecovar_data_GLM_nocategories)
+summary(M_4_7)
+plot(M_4_7)
+
+#Geo vs Climatic soil thickness and pre (4.8)
+
+vP4_8 <- varIdent(form=~top_com_log+MAP_chelsa)
+M_4_8<-gls(composition_genera ~ top_com_log+MAP_chelsa, 
+           weights=vP4_8, data=ecovar_data_GLM_nocategories)
+summary(M_4_8)
+plot(M_4_8)
+
+#Geo vs Climatic soil thickness and pre (4.9)
+
+vP4_9 <- varIdent(form=~top_com_log+range_pre_chelsa)
+M_4_9<-gls(composition_genera ~ top_com_log+range_pre_chelsa, 
+           weights=vP4_9, data=ecovar_data_GLM_nocategories)
+summary(M_4_9)
+plot(M_4_9)
+
+
+
+#Geo vs Climatic latitude and pre (4.10)
+
+vP4_10 <- varIdent(form=~Latitude+MAT_chelsa)
+M_4_10<-gls(composition_genera ~ Latitude+MAT_chelsa, 
+           weights=vP4_10, data=ecovar_data_GLM_nocategories)
+summary(M_4_10)
+plot(M_4_10)
+
+#Geo vs Climatic latitude and pre (4.11)
+
+vP4_11 <- varIdent(form=~Latitude+MAP_chelsa)
+M_4_11<-gls(composition_genera ~ Latitude+MAP_chelsa, 
+            weights=vP4_11, data=ecovar_data_GLM_nocategories)
+summary(M_4_11)
+plot(M_4_11)
+
+#Geo vs Climatic latitude and pre (4.12)
+
+vP4_12 <- varIdent(form=~Latitude+range_pre_chelsa)
+M_4_12<-gls(composition_genera ~ Latitude+range_pre_chelsa, 
+            weights=vP4_12, data=ecovar_data_GLM_nocategories)
+summary(M_4_12)
+plot(M_4_12)
