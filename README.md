@@ -1,10 +1,8 @@
 # Hierarchical Patterns of Soil Biodiversity in the Atacama Desert: Insights Across Biological Scales
 
 Here you will find all the code implemented in the analysis of the manuscriot titled "Hierarchical Patterns of Soil Biodiversity in the Atacama Desert: Insights Across Biological Scales". The analysis is divided in two blocks: Ecological estimates and Modeling. 
-Inside the Ecological Estimates folder you will find the scripts for obtaining jaccard dissimalirity index and perform a mantel test, as well as information on how to generate the haplotype networks to further estimate eucledian distance and nucleotide diversity. 
-In the modeling folder, you will find scripts for modeling using linear models and random forest for both genera richness and reproductive mode estimation. 
 
-The necessary input files for for Ecological estimates and modelling can be found in Zenodo (10.5281/zenodo.13880073). File names on the zenodo folder correspond to the file names in the different scirpts. 
+1. Inside the Ecological Estimates folder you will find the scripts for obtaining jaccard dissimalirity index and perform a mantel test, as well as information on how to generate the haplotype networks to further estimate eucledian distance and nucleotide diversity.
 
 * To run ecological estimates and the different models in R, the following packages are quired on R:
 
@@ -34,6 +32,8 @@ The necessary input files for for Ecological estimates and modelling can be foun
 | tidyverse     | 2.0.0    |
 | vegan         | 2.6-6.1  |
 
+2. In the modeling folder, you will find scripts for modeling using linear models and random forest for both genera richness and reproductive mode estimation. 
+
 * To gather ecological factors for the set of coordinates of each of the sampling spots using python 3, the following are reuiqred:
 
 | Package             | Version   |
@@ -51,7 +51,7 @@ The necessary input files for for Ecological estimates and modelling can be foun
 | mpl_toolkits.axes_grid1 | 3.8.0 |
 
 
-
+The necessary input files for for Ecological estimates and modelling can be found in Zenodo (10.5281/zenodo.13880073). File names on the zenodo folder correspond to the file names in the different scirpts. 
 
 
 
