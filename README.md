@@ -6,6 +6,7 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 
 * To run ecological estimates and the different models in R, the following packages are quired on R:
 
+  <div style="text-align: center;">
   
 | Package       | Version  |
 |---------------|----------|
@@ -32,9 +33,13 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 | tidyverse     | 2.0.0    |
 | vegan         | 2.6-6.1  |
 
+</div>
+
 2. In the modeling folder, you will find scripts for modeling using linear models and random forest for both genera richness and reproductive mode estimation. 
 
 * To gather ecological factors for the set of coordinates of each of the sampling spots using python 3, the following are reuiqred:
+
+ <div style="text-align: center;">
 
 | Package             | Version   |
 |---------------------|-----------|
@@ -50,6 +55,7 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 | matplotlib.colors   | 3.8.0     |
 | mpl_toolkits.axes_grid1 | 3.8.0 |
 
+</div>
 
 The necessary input files for for Ecological estimates and modelling can be found in Zenodo (10.5281/zenodo.13880073). File names on the zenodo folder correspond to the file names in the different scirpts. 
 
