@@ -57,7 +57,7 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 
 </center>
 
-The necessary input files for for Ecological estimates and modelling can be found in Zenodo (10.5281/zenodo.13880073). File names on the zenodo folder correspond to the file names in the different scirpts. 
+      **The necessary input files for for Ecological estimates and modelling can be found in Zenodo (10.5281/zenodo.13880073). File names on the zenodo folder correspond to the file names in the different scirpts.**
 
 
 
