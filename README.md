@@ -32,7 +32,7 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 
 * To gather ecological factors for the set of coordinates of each of the sampling spots using python 3, the following are reuiqred:
 
-  | Package             | Version   |
+| Package             | Version   |
 |---------------------|-----------|
 | pandas              | 2.1.1     |
 | xarray              | 2023.9.0  |
