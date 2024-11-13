@@ -1,5 +1,6 @@
 #This is the code implemented for gathering environmental and geomorphological variables for each of the smapling spots sampled and analyzed
-#Input files used are specified in the manuscript (15arc_dem.zarr, Chelsa 1981-2010 pr and tas, NASADEM, ASTER_GDEM_DEM, GLim_wgs_500m and average_soil_and_sediment )
+#Input files used are specified in the manuscript (15arc_dem.zarr, Chelsa 1981-2010 pr and tas, NASADEM, ASTER_GDEM_DEM, GLim_wgs_500m and average_soil_and_sediment, 
+#a smaller version of the datasets required can be found on zenodo in the zip file EcolData.zip)
 
 import pandas as pd
 import xarray as xr
