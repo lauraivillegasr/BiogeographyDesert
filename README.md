@@ -2,7 +2,7 @@
 
 Here you will find all the code implemented in the analysis of the manuscriot titled "Hierarchical Patterns of Soil Biodiversity in the Atacama Desert: Insights Across Biological Scales". The analysis is divided in two: Ecological estimates and Modeling. Within the Ecological Estimates folder you will find the scripts for obtaining the haplotype networks to further estimate eucledian distance and nucleotide diversity, additionaly you can analyze ecological  variable correlation. Within modeling you will find scripts for modeling using linear models and random forest for both genera richness and reproductive mode estimation. The necessary input files can be found in Zenodo (10.5281/zenodo.13880073). 
 
-* To run ecological estimates and the different models in R, the following packages are quired:
+* To run ecological estimates and the different models in R, the following packages are quired on R:
 
   
 | Package       | Version  |
@@ -29,6 +29,22 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 | sf            | 1.0-16   |
 | tidyverse     | 2.0.0    |
 | vegan         | 2.6-6.1  |
+
+* To gather ecological factors for the set of coordinates of each of the sampling spots using python 3, the following are reuiqred:
+
+  | Package             | Version   |
+|---------------------|-----------|
+| pandas              | 2.1.1     |
+| xarray              | 2023.9.0  |
+| matplotlib          | 3.8.0     |
+| numpy               | 1.26.0    |
+| richdem             | 0.3.4     |
+| rioxarray           | 0.18.1    |
+| cmcrameri           | 1.7.1     |
+| geopandas           | 0.14.0    |
+| shapely             | 2.0.1     |
+| matplotlib.colors   | 3.8.0     |
+| mpl_toolkits.axes_grid1 | 3.8.0 |
 
 
 
