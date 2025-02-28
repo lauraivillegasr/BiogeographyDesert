@@ -10,7 +10,7 @@ library(rpart)
 library(arrow)
 
 #Load data
-ecovar_data_GLM_nocategories <- read.csv2("/data/EcoVarData_generacurated_nocategories.csv")
+ecovar_data_GLS_no_categories <- read.csv2("/data/EcoVarData_transect_testing_fixed_feb.csv")
 #Normalize same variables that were normalized for the GLS
 ecovar_data_GLM_nocategories$soil_thick_log<-(log((ecovar_data_GLM_nocategories$soil_thick)+1))
 
