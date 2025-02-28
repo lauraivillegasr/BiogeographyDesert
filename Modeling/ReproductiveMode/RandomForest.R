@@ -10,7 +10,7 @@ library(arrow)
 #### Reproductive mode RF #### 
 
 
-asex_sex_data_GLM2 <- read.csv2("/data/asex_sex_data_GLM_nocategory.csv")
+asex_sex_data_GLM2 <- read.csv2("/data/EcoVarData_reprod_transect_testing_fixed.csv")
 
 # Split the data into training and testing sets
 #initial split method prop 0.6
