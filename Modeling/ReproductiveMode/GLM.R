@@ -1,7 +1,7 @@
 #### Reproductive mode GLM with aditional analysis incorporating vegetation information #### 
 
 
-asex_sex_data_GLM2 <- read.csv2("/data/asex_sex_data_GLM_nocategory.csv")
+asex_sex_data_GLM2 <- read.csv2("/data/EcoVarData_reprod_transect_testing_fixed.csv")
 
 #Test the different models, null model now includes vegetation coverage around 100m and percentage of phanerophytes in sampling spot
 
