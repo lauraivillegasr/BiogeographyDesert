@@ -35,7 +35,7 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 
 </center>
 
-2. In the modeling folder, you will find scripts for modeling using linear models and random forest for both genera richness and reproductive mode estimation. 
+2. In the modeling folder, you will find scripts for modeling using linear models (including mixed-effects) and random forest for both genera richness and reproductive mode estimation. 
 
 * To gather ecological factors for the set of coordinates of each of the sampling spots using python 3, the following are reuiqred:
 
@@ -57,7 +57,7 @@ Here you will find all the code implemented in the analysis of the manuscriot ti
 
 </center>
 
-**The necessary input files for for Ecological estimates and modelling can be found in Zenodo ([10.5281/zenodo.13880073](https://zenodo.org/records/14131623)). File names on the zenodo folder correspond to the file names in the different scirpts.**
+**The necessary input files for for Ecological estimates and modelling can be found in Zenodo (https://doi.org/10.5281/zenodo.14930774). File names on the zenodo folder correspond to the file names in the different scirpts.**
 
 
 
