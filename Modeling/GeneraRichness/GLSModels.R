@@ -7,7 +7,7 @@ library(arrow)
 
 # Read input data
 
-ecovar_data_GLS_no_categories <- read.csv2("/data/EcoVarData_generacurated_nocategories.csv")
+ecovar_data_GLS_no_categories <- read.csv2("/data/EcoVarData_transect_testing_fixed_feb.csv")
 
 #Transform data to fit normal distribution 
 ecovar_data_GLS_no_categories$soil_thick_log<-(log((ecovar_data_GLS_no_categories$soil_thick)+1))
